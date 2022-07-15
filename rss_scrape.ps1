@@ -11,11 +11,8 @@ $cve_regex = 'CVE-\d{4}-\d*'
 $parsedInput = $tenable_feed.rss.channel.item | Select-Object guid, link, pubDate, @{N="Title"; E={$_.ChildNodes.item(0).InnerText}},@{N="Description"; E={($_.ChildNodes.item(4).InnerText) -replace '<[^>]+>',''}} #| Export-Csv "plugin_feed.csv" -NoTypeInformation -Delimiter:"," -Encoding:UTF8
 $parsedInput | ForEach-Object {
     if (($_.Title -match $date_find) -or ($_.Title -match ".*Windows.*Security Update") -or ($_.Title -match ".*Microsoft.*")) {
-        $kb = $_.Description | Select-String -Pattern $kb_regex -AllMatches | % { $_.Matches.Groups } | % { $_.Value } | Select -index (1,2)
-        $cve = $_.Description | Select-String -Pattern $cve_regex -AllMatches | % { $_.Matches.Groups } | % { $_.Value } 
-        $kbList += $kb
-        $cveList += $cve
-
+        $kbList += $_.Description | Select-String -Pattern $kb_regex -AllMatches | % { $_.Matches.Groups } | % { $_.Value } | Select -index (1,2)
+        $cveList += $_.Description | Select-String -Pattern $cve_regex -AllMatches | % { $_.Matches.Groups } | % { $_.Value } 
     }
 }
 
