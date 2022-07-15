@@ -1,4 +1,5 @@
 $date_find = Get-Date -Format "MMMM yyyy"
+$date = Get-Date -Format "yyyy-MM"
 $kbList = @()
 $cveList = @()
 $collectionWithItems_KB = New-Object System.Collections.ArrayList
